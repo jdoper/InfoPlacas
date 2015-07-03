@@ -20,7 +20,7 @@ import com.infoplacas.model.Veiculo;
 
 @Stateless
 @Path("/veiculo")
-public class HelloWorldResource {
+public class VeiculoResource {
 	@EJB
 	private VeiculoDAO veiculoDAO;
 	
@@ -37,6 +37,14 @@ public class HelloWorldResource {
 		Veiculo veiculo = veiculoDAO.getVeiculo(placa);
 		return Response.ok(veiculo).build();
 	}
+	
+	/*
+	 * Criar Veiculo
+	 * */
+	
+	/*
+	 * Editar Veiculo
+	 * */
 	
 	@POST
 	@Path("/excluir")
