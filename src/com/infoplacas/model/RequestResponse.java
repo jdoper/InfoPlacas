@@ -6,6 +6,7 @@ public class RequestResponse {
 	
 	public RequestResponse() {
 		this.success = true;
+		mensagem = "";
 	}
 	
 	public RequestResponse(String mensagem) {

@@ -6,7 +6,10 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import javax.validation.ConstraintViolationException;
+import javax.ws.rs.core.Response;
 
+import com.infoplacas.model.RequestResponse;
 import com.infoplacas.model.Veiculo;
 
 
@@ -39,8 +42,14 @@ public class VeiculoDAOImpl implements VeiculoDAO {
 	}
 	
 	@Override
-	public void remover(String placa) {
-		Veiculo veiculo = em.find(Veiculo.class, placa);
-		em.remove(veiculo);
+	public boolean remover(String placa) {
+		try {
+			Veiculo veiculo = em.find(Veiculo.class, placa);
+			em.remove(veiculo);
+			return true;
+		}
+		catch (IllegalArgumentException exception) {
+			return false;
+		}	
 	}
 }

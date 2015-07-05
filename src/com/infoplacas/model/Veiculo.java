@@ -10,6 +10,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 
 @NamedQueries({
 	@NamedQuery(name="listaVeiculos", query="SELECT v FROM Veiculo v ORDER BY v.dataCadastro DESC")
@@ -50,6 +51,8 @@ public class Veiculo implements Serializable {
 	}
 
 	@Id
+	@Pattern(regexp="[A-Z]{3}-[0-9]{4}", 
+			message="Placa com formato invalido")
 	public String getPlaca() {
 		return placa;
 	}
@@ -58,7 +61,7 @@ public class Veiculo implements Serializable {
 		this.placa = placa;
 	}
 
-	@NotNull
+	@NotNull(message="Especifique a marca/modelo do veiculo")
 	public String getMarcaModelo() {
 		return marcaModelo;
 	}
@@ -67,7 +70,7 @@ public class Veiculo implements Serializable {
 		this.marcaModelo = marcaModelo;
 	}
 
-	@NotNull
+	@NotNull(message="Especifique o ano de fabricacao do veiculo")
 	public String getFabricacaoModelo() {
 		return fabricacaoModelo;
 	}
@@ -76,7 +79,7 @@ public class Veiculo implements Serializable {
 		this.fabricacaoModelo = fabricacaoModelo;
 	}
 
-	@NotNull
+	@NotNull(message="Especifique o ano de validade da licenca veicular")
 	public String getLicenciadoAte() {
 		return licenciadoAte;
 	}

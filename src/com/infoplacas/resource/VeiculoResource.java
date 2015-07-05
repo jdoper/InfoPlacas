@@ -1,9 +1,12 @@
 package com.infoplacas.resource;
 import java.util.Date;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import javax.validation.ConstraintViolationException;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.DefaultValue;
@@ -43,8 +46,14 @@ public class VeiculoResource {
 	@Path("/buscar")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response pesquisarVeiculo(@QueryParam("placa") String placa) {
-		Veiculo veiculo = veiculoDAO.getVeiculo(placa);
-		return Response.status(200).entity(veiculo).build();
+		// Verifica parametros passados
+		if (verificarPlaca(placa)) {
+			Veiculo veiculo = veiculoDAO.getVeiculo(placa);
+			return Response.status(200).entity(veiculo).build();
+		}
+		else {
+			return Response.status(400).entity(new RequestResponse("Placa com formato invalido")).build();
+		}
 	}
 	
 	/*
@@ -54,8 +63,15 @@ public class VeiculoResource {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response criarVeiculo(Veiculo veiculo) {
-		veiculoDAO.salvar(veiculo);
-		return Response.status(201).entity(new RequestResponse()).build();
+		// Verifica parametros passados
+		String response = verificarVeiculo(veiculo);
+		if (response != null) {
+			veiculoDAO.salvar(veiculo);
+			return Response.status(201).entity(new RequestResponse()).build();
+		}
+		else {
+			return Response.status(400).entity(new RequestResponse(response)).build();
+		}
 	}
 	
 	/*
@@ -66,8 +82,15 @@ public class VeiculoResource {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response editarVeiculo(Veiculo veiculo) {
-		veiculoDAO.atualizar(veiculo);
-		return Response.status(200).entity(new RequestResponse()).build();
+		// Verifica parametros passados
+		String response = verificarVeiculo(veiculo);
+		if (response != null) {
+			veiculoDAO.atualizar(veiculo);
+			return Response.status(201).entity(new RequestResponse()).build();
+		}
+		else {
+			return Response.status(400).entity(new RequestResponse(response)).build();
+		}
 	}
 	
 	/*
@@ -77,7 +100,53 @@ public class VeiculoResource {
 	@Path("/excluir")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response excluirVeiculo(@QueryParam("placa") String placa) {
-		veiculoDAO.remover(placa);
-		return Response.status(200).entity(new RequestResponse()).build();
+		// Verifica parametros passados
+		if (verificarPlaca(placa)) {
+			if (veiculoDAO.remover(placa)) {
+				return Response.status(200).entity(new RequestResponse()).build();
+			}
+			else {
+				return Response.status(400).entity(new RequestResponse("Não existe veiculo cadastrado com a placa passada")).build();
+			}	
+		}
+		else {
+			return Response.status(400).entity(new RequestResponse("Placa com formato invalido")).build();
+		}
+	}
+	
+	
+	/*
+	 * Funçoes para verificar parametros
+	 * */
+
+	private String verificarVeiculo(Veiculo veiculo) {
+        Pattern pattern = Pattern.compile("[A-Z]{3,3}-\\d{4,4}");
+        Matcher matcher = pattern.matcher(veiculo.getPlaca());
+ 
+        if (!matcher.find()){
+            return "Placa com formato invalido";
+        }
+        else if (veiculo.getMarcaModelo() == null || veiculo.getMarcaModelo().equals("")) {
+        	return "Campo marcaModelo vazio";
+        }
+        else if (veiculo.getFabricacaoModelo() == null || veiculo.getFabricacaoModelo().equals("")) {
+        	return "Campo fabricacaoModelo vazio";
+        }
+        else if (veiculo.getLicenciadoAte() == null || veiculo.getLicenciadoAte().equals("")) {
+        	return "Campo licenciadoAte vazio";
+        }
+        else{
+            return null;
+        }
+	}
+	
+	private boolean verificarPlaca(String placa) {
+		Pattern pattern = Pattern.compile("[A-Z]{3,3}-\\d{4,4}");
+        Matcher matcher = pattern.matcher(placa);
+ 
+        if (matcher.find()){
+            return true;
+        }
+        return false;
 	}
 }

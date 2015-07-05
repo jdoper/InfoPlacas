@@ -17,5 +17,5 @@ public interface VeiculoDAO {
 	
 	public void atualizar(Veiculo veiculo);
 	
-	public void remover(String placa);
+	public boolean remover(String placa);
 }
