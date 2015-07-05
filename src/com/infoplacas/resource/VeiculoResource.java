@@ -31,7 +31,7 @@ public class VeiculoResource {
 	private VeiculoDAO veiculoDAO;
 	
 	/*
-	 * GetAll
+	 * Listar Veiculos cadastrados
 	 * */
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
@@ -119,6 +119,7 @@ public class VeiculoResource {
 	 * Funçoes para verificar parametros
 	 * */
 
+	// Verifica os parametros do Veiculo passado
 	private String verificarVeiculo(Veiculo veiculo) {
         Pattern pattern = Pattern.compile("[A-Z]{3,3}-\\d{4,4}");
         Matcher matcher = pattern.matcher(veiculo.getPlaca());
@@ -140,6 +141,7 @@ public class VeiculoResource {
         }
 	}
 	
+	// Verifica o parametro placa passado
 	private boolean verificarPlaca(String placa) {
 		Pattern pattern = Pattern.compile("[A-Z]{3,3}-\\d{4,4}");
         Matcher matcher = pattern.matcher(placa);
