@@ -2,3 +2,4 @@
 .project
 .settings/*
 target/classes/com/infoplacas/*
+*.class
