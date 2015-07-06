@@ -6,10 +6,7 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-import javax.validation.ConstraintViolationException;
-import javax.ws.rs.core.Response;
 
-import com.infoplacas.model.RequestResponse;
 import com.infoplacas.model.Veiculo;
 
 

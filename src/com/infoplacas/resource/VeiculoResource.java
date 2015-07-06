@@ -1,16 +1,11 @@
 package com.infoplacas.resource;
-import java.util.Date;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
-import javax.validation.ConstraintViolationException;
 import javax.ws.rs.Consumes;
-import javax.ws.rs.DELETE;
-import javax.ws.rs.DefaultValue;
-import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -18,7 +13,6 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.StatusType;
 
 import com.infoplacas.dao.VeiculoDAO;
 import com.infoplacas.model.RequestResponse;
@@ -49,7 +43,12 @@ public class VeiculoResource {
 		// Verifica parametros passados
 		if (verificarPlaca(placa)) {
 			Veiculo veiculo = veiculoDAO.getVeiculo(placa);
-			return Response.status(200).entity(veiculo).build();
+			if (veiculo != null) {
+				return Response.status(200).entity(veiculo).build();
+			}
+			else {
+				return Response.status(400).entity(new RequestResponse("Não existe veiculo cadastrado com a placa passada")).build();
+			}
 		}
 		else {
 			return Response.status(400).entity(new RequestResponse("Placa com formato invalido")).build();
@@ -65,7 +64,7 @@ public class VeiculoResource {
 	public Response criarVeiculo(Veiculo veiculo) {
 		// Verifica parametros passados
 		String response = verificarVeiculo(veiculo);
-		if (response != null) {
+		if (response == null) {
 			veiculoDAO.salvar(veiculo);
 			return Response.status(201).entity(new RequestResponse()).build();
 		}
@@ -84,7 +83,7 @@ public class VeiculoResource {
 	public Response editarVeiculo(Veiculo veiculo) {
 		// Verifica parametros passados
 		String response = verificarVeiculo(veiculo);
-		if (response != null) {
+		if (response == null) {
 			veiculoDAO.atualizar(veiculo);
 			return Response.status(201).entity(new RequestResponse()).build();
 		}
@@ -121,7 +120,7 @@ public class VeiculoResource {
 
 	// Verifica os parametros do Veiculo passado
 	private String verificarVeiculo(Veiculo veiculo) {
-        Pattern pattern = Pattern.compile("[A-Z]{3,3}-\\d{4,4}");
+        Pattern pattern = Pattern.compile("[A-Z]{3,3}-[0-9]{4,4}");
         Matcher matcher = pattern.matcher(veiculo.getPlaca());
  
         if (!matcher.find()){
@@ -136,7 +135,7 @@ public class VeiculoResource {
         else if (veiculo.getLicenciadoAte() == null || veiculo.getLicenciadoAte().equals("")) {
         	return "Campo licenciadoAte vazio";
         }
-        else{
+        else {
             return null;
         }
 	}
