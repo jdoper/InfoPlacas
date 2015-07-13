@@ -13,7 +13,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
 @NamedQueries({
-	@NamedQuery(name="listaVeiculos", query="SELECT v FROM Veiculo v ORDER BY v.dataCadastro DESC")
+	@NamedQuery(name="listaVeiculos", query="SELECT v FROM Veiculo v")
 })
 
 @Entity
@@ -28,7 +28,6 @@ public class Veiculo implements Serializable {
 	private float taxasDetran;
 	private float seguroDPVAT;
 	private String observacoes;
-	private Date dataCadastro;
 	
 	public Veiculo() {
 		super();
@@ -36,7 +35,7 @@ public class Veiculo implements Serializable {
 
 	public Veiculo(String placa, String marcaModelo, String fabricacaoModelo,
 			String licenciadoAte, float multas, float ipva, float taxasDetran,
-			float seguroDPVAT, String observacoes, Date dataCadastro) {
+			float seguroDPVAT, String observacoes) {
 		super();
 		this.placa = placa;
 		this.marcaModelo = marcaModelo;
@@ -47,7 +46,6 @@ public class Veiculo implements Serializable {
 		this.taxasDetran = taxasDetran;
 		this.seguroDPVAT = seguroDPVAT;
 		this.observacoes = observacoes;
-		this.dataCadastro = dataCadastro;
 	}
 
 	@Id
@@ -127,15 +125,6 @@ public class Veiculo implements Serializable {
 	public void setObservacoes(String observacoes) {
 		this.observacoes = observacoes;
 	}
-
-	@Temporal(value=TemporalType.TIMESTAMP)
-	public Date getDataCadastro() {
-		return dataCadastro;
-	}
-
-	public void setDataCadastro(Date dataCadastro) {
-		this.dataCadastro = dataCadastro;
-	}
 	
 	@Override
 	public String toString() {
@@ -149,7 +138,6 @@ public class Veiculo implements Serializable {
 				+ ", taxasDetran=" + taxasDetran
 				+ ", seguroDPVAT=" + seguroDPVAT
 				+ ", observacoes=" + observacoes
-				+ ", dataCadastro=" + dataCadastro
 				+ "]";
 	}
 }
