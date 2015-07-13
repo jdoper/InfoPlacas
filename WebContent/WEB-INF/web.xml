@@ -17,6 +17,10 @@
       <param-value>com.infoplacas.resource</param-value>
     </init-param>
     <init-param>
+    	<param-name>com.sun.jersey.spi.container.ContainerResponseFilter</param-name>
+    	<param-value>com.infoplacas.filter.CORSFilter</param-value>
+    </init-param>
+    <init-param>
 		<param-name>com.sun.jersey.api.json.POJOMappingFeature</param-name>
 		<param-value>true</param-value>
 	</init-param>
