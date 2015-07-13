@@ -27,6 +27,7 @@ public class VeiculoResource {
 	/*
 	 * Listar Veiculos cadastrados
 	 * */
+	// URL: http://localhost:8000/InfoPlacas/veiculo
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<Veiculo> listarVeiculos() {
@@ -36,6 +37,7 @@ public class VeiculoResource {
 	/*
 	 * Buscar Veiculo
 	 * */
+	// URL: http://localhost:8080/InfoPlacas/veiculo/buscar?placa=ASD-1234
 	@POST
 	@Path("/buscar")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -58,6 +60,7 @@ public class VeiculoResource {
 	/*
 	 * Cadastrar Veiculo
 	 * */
+	// URL: http://localhost:8080/InfoPlacas/veiculo
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
@@ -76,6 +79,7 @@ public class VeiculoResource {
 	/*
 	 * Editar Veiculo
 	 * */
+	// URL: http://localhost:8080/InfoPlacas/veiculo/editar
 	@POST
 	@Path("/editar")
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -95,6 +99,7 @@ public class VeiculoResource {
 	/*
 	 * Excluir Veiculo
 	 * */
+	// URL: http://localhost:8080/InfoPlacas/veiculo/excluir?placa=ASD-1234
 	@POST
 	@Path("/excluir")
 	@Produces(MediaType.APPLICATION_JSON)
