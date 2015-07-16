@@ -13,7 +13,7 @@ public interface VeiculoDAO {
 	
 	public Veiculo getVeiculo(String placa);
 	
-	public void salvar(Veiculo veiculo);
+	public void salvar(Veiculo veiculo) throws Exception;
 	
 	public void atualizar(Veiculo veiculo);
 	

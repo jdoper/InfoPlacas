@@ -3,7 +3,7 @@ package com.infoplacas.dao;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
+import javax.validation.ConstraintViolationException;
 
 import com.infoplacas.model.Usuario;
 
@@ -14,8 +14,13 @@ public class UsuarioDAOImpl implements UsuarioDAO {
 	private EntityManager em;
 	
 	@Override
-	public void salvar(Usuario usuario) {
-		em.persist(usuario);
+	public void salvar(Usuario usuario) throws Exception {
+		try {
+			em.persist(usuario);
+		}
+		catch (ConstraintViolationException exception) {
+			throw new Exception(exception.getMessage());
+		}
 	}
 
 	@Override

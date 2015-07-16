@@ -29,8 +29,7 @@ public class UsuarioResource {
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response cadastrarUsuario(Usuario usuario) {
-		// Verifica parametros passados
+	public Response cadastrarUsuario(Usuario usuario) throws Exception {
 		String response = verificarUsuario(usuario);
 		if (response == null) {
 			usuarioDAO.salvar(usuario);

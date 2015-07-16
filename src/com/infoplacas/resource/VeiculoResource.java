@@ -64,15 +64,20 @@ public class VeiculoResource {
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response criarVeiculo(Veiculo veiculo) {
+	public Response criarVeiculo(Veiculo veiculo) throws Exception {
 		// Verifica parametros passados
-		String response = verificarVeiculo(veiculo);
-		if (response == null) {
-			veiculoDAO.salvar(veiculo);
-			return Response.status(201).entity(new RequestResponse()).build();
+		try {
+			String response = verificarVeiculo(veiculo);
+			if (response == null) {
+				veiculoDAO.salvar(veiculo);
+				return Response.status(201).entity(new RequestResponse()).build();
+			}
+			else {
+				return Response.status(400).entity(new RequestResponse(response)).build();
+			}
 		}
-		else {
-			return Response.status(400).entity(new RequestResponse(response)).build();
+		catch (Exception exception) {
+			return Response.status(400).entity(new RequestResponse("Placa duplicada")).build();
 		}
 	}
 	
@@ -119,11 +124,12 @@ public class VeiculoResource {
 	}
 	
 	
+	
 	/*
-	 * Funçoes para verificar parametros
+	 * Funcoes de verificacao de parametros
 	 * */
 
-	// Verifica os parametros do Veiculo passado
+	// Verifica o veiculo passada como parametro
 	private String verificarVeiculo(Veiculo veiculo) {
         Pattern pattern = Pattern.compile("[A-Z]{3,3}-[0-9]{4,4}");
         Matcher matcher = pattern.matcher(veiculo.getPlaca());
@@ -145,7 +151,7 @@ public class VeiculoResource {
         }
 	}
 	
-	// Verifica o parametro placa passado
+	// Verifica a placa passada como parametro
 	private boolean verificarPlaca(String placa) {
 		Pattern pattern = Pattern.compile("[A-Z]{3,3}-\\d{4,4}");
         Matcher matcher = pattern.matcher(placa);
