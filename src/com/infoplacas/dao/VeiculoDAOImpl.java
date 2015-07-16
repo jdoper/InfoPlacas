@@ -9,7 +9,6 @@ import javax.persistence.Query;
 
 import com.infoplacas.model.Veiculo;
 
-
 @Stateless
 public class VeiculoDAOImpl implements VeiculoDAO {
 
