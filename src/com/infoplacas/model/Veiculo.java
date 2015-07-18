@@ -27,7 +27,7 @@ public class Veiculo implements Serializable {
 	private float taxasDetran;
 	private float seguroDPVAT;
 	private String observacoes;
-	private Usuario usuario;
+	// private Usuario usuario;
 	
 	public Veiculo() {
 		super();
@@ -129,6 +129,7 @@ public class Veiculo implements Serializable {
 	/*
 	 * Relacionamento
 	 * */
+	/*
 	@ManyToOne
 	@JoinColumn(name="usuario_login") 
 	public Usuario getUsuario() {
@@ -138,4 +139,5 @@ public class Veiculo implements Serializable {
 	public void setUsuario(Usuario usuario) {
 		this.usuario = usuario;
 	}
+	*/
 }

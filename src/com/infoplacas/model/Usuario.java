@@ -23,7 +23,7 @@ public class Usuario implements Serializable {
 	private String login;
 	private String email;
 	private String senha;
-	private Collection<Veiculo> veiculos = new ArrayList<Veiculo>();
+	// private Collection<Veiculo> veiculos = new ArrayList<Veiculo>();
 	
 	public Usuario() {
 		super();
@@ -67,6 +67,7 @@ public class Usuario implements Serializable {
 	/*
 	 * Relacionamento
 	 * */
+	/*
 	@OneToMany(mappedBy="usuario")
 	public Collection<Veiculo> getVeiculos() {
 		return veiculos;
@@ -75,4 +76,5 @@ public class Usuario implements Serializable {
 	public void setVeiculos(Collection<Veiculo> veiculos) {
 		this.veiculos = veiculos;
 	}
+	*/
 }
