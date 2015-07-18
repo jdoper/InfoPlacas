@@ -1,6 +1,5 @@
 package com.infoplacas.dao;
 
-import java.sql.SQLException;
 import java.util.List;
 
 import javax.ejb.Stateless;
@@ -38,13 +37,8 @@ public class VeiculoDAOImpl implements VeiculoDAO {
 	 * Cria um novo registro de Veiculo
 	 * */
 	@Override
-	public void salvar(Veiculo veiculo) throws Exception {
-		try {
-			em.persist(veiculo);
-		}
-		catch (SQLException exception) {
-			throw new Exception(exception.getMessage());
-		}
+	public void salvar(Veiculo veiculo) {
+		em.persist(veiculo);
 	}
 
 	/*
@@ -59,9 +53,13 @@ public class VeiculoDAOImpl implements VeiculoDAO {
 	 * Remove veiculo atraves da placa passada
 	 * */
 	@Override
-	public boolean remover(String placa) {
-		Veiculo veiculo = em.find(Veiculo.class, placa);
-		em.remove(veiculo);
-		return true;
+	public void remover(String placa) throws Exception {
+		try {
+			Veiculo veiculo = em.find(Veiculo.class, placa);
+			em.remove(veiculo);
+		}
+		catch (IllegalArgumentException exception) {
+			throw new Exception("Não exsite veiculo com a placa cadastrada");
+		}
 	}
 }

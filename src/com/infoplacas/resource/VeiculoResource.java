@@ -1,4 +1,5 @@
 package com.infoplacas.resource;
+
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -111,12 +112,13 @@ public class VeiculoResource {
 	public Response excluirVeiculo(@QueryParam("placa") String placa) {
 		// Verifica parametros passados
 		if (verificarPlaca(placa)) {
-			if (veiculoDAO.remover(placa)) {
+			try {
+				veiculoDAO.remover(placa);
 				return Response.status(200).entity(new RequestResponse()).build();
 			}
-			else {
-				return Response.status(400).entity(new RequestResponse("Não existe veiculo cadastrado com a placa passada")).build();
-			}	
+			catch (Exception exception) {
+				return Response.status(400).entity(new RequestResponse(exception.getMessage())).build();
+			}
 		}
 		else {
 			return Response.status(400).entity(new RequestResponse("Placa com formato invalido")).build();
@@ -129,13 +131,13 @@ public class VeiculoResource {
 	 * Funcoes de verificacao de parametros
 	 * */
 
-	// Verifica o veiculo passada como parametro
+	// Verifica o veiculo passado como parametro
 	private String verificarVeiculo(Veiculo veiculo) {
         Pattern pattern = Pattern.compile("[A-Z]{3,3}-[0-9]{4,4}");
         Matcher matcher = pattern.matcher(veiculo.getPlaca());
  
-        if (!matcher.find()){
-            return "Placa com formato invalido";
+        if (veiculo.getPlaca() == null || veiculo.getPlaca().equals("")) {
+        	return "Campo placa vazio";
         }
         else if (veiculo.getMarcaModelo() == null || veiculo.getMarcaModelo().equals("")) {
         	return "Campo marcaModelo vazio";
@@ -145,6 +147,9 @@ public class VeiculoResource {
         }
         else if (veiculo.getLicenciadoAte() == null || veiculo.getLicenciadoAte().equals("")) {
         	return "Campo licenciadoAte vazio";
+        }
+        else if (!matcher.find()){
+            return "Placa com formato invalido";
         }
         else {
             return null;

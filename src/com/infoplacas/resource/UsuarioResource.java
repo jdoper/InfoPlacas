@@ -1,5 +1,6 @@
 package com.infoplacas.resource;
 
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -30,13 +31,18 @@ public class UsuarioResource {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response cadastrarUsuario(Usuario usuario) throws Exception {
-		String response = verificarUsuario(usuario);
-		if (response == null) {
-			usuarioDAO.salvar(usuario);
-			return Response.status(201).entity(new RequestResponse()).build();
+		try {	
+			String response = verificarUsuario(usuario);
+			if (response == null) {
+				usuarioDAO.salvar(usuario);
+				return Response.status(201).entity(new RequestResponse()).build();
+			}
+			else {
+				return Response.status(400).entity(new RequestResponse(response)).build();
+			}
 		}
-		else {
-			return Response.status(400).entity(new RequestResponse(response)).build();
+		catch (Exception exception) {
+			return Response.status(400).entity(new RequestResponse(exception.getMessage())).build();
 		}
 	}
 	
@@ -49,21 +55,39 @@ public class UsuarioResource {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response pesquisarVeiculo(Usuario usuario) {
-		Usuario resultado = usuarioDAO.buscarUsuario(usuario);
-		if (resultado != null) {
-			return Response.status(200).entity(resultado).build();
+		List<Usuario> resultado = usuarioDAO.buscarUsuario(usuario);
+		if (resultado != null && resultado.size() > 0) {
+			return Response.status(200).entity(new RequestResponse()).build();
 		}
 		else {
 			return Response.status(400).entity(new RequestResponse("Usuário não existe")).build();
 		}
 	}
 	
+	/*
+	 * Excluir Usuario
+	 * */
+	// URL: http://localhost:8080/InfoPlacas/usuario/excluir
+	@POST
+	@Path("/excluir")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response ExcluirVeiculo(Usuario usuario) {
+		try {
+			usuarioDAO.remover(usuario);
+			return Response.status(200).entity(new RequestResponse()).build();
+		}
+		catch (Exception exception) {
+			return Response.status(400).entity(new RequestResponse(exception.getMessage())).build();
+		}
+	}
+	
 	
 	/*
-	 * Funçoes para verificar parametros
+	 * Funcoes de verificacao de parametros
 	 * */
 
-	// Verifica os parametros do Veiculo passado
+	// Verifica o usuario passado como parametro
 	private String verificarUsuario(Usuario usuario) {
 		Pattern pattern = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
         Matcher matcher = pattern.matcher(usuario.getEmail());

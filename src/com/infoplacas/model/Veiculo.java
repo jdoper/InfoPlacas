@@ -4,6 +4,8 @@ import java.io.Serializable;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.validation.constraints.NotNull;
@@ -15,7 +17,7 @@ import javax.validation.constraints.Pattern;
 
 @Entity
 public class Veiculo implements Serializable {
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 854477184576137624L;
 	private String placa;
 	private String marcaModelo;
 	private String fabricacaoModelo;
@@ -25,6 +27,7 @@ public class Veiculo implements Serializable {
 	private float taxasDetran;
 	private float seguroDPVAT;
 	private String observacoes;
+	private Usuario usuario;
 	
 	public Veiculo() {
 		super();
@@ -123,18 +126,16 @@ public class Veiculo implements Serializable {
 		this.observacoes = observacoes;
 	}
 	
-	@Override
-	public String toString() {
-		return "Veiculo ["
-				+ "placa=" + placa
-				+ ", marcaModelo=" + marcaModelo
-				+ ", fabricacaoModelo=" + fabricacaoModelo
-				+ ", licenciadoAte=" + licenciadoAte
-				+ ", multas=" + multas
-				+ ", ipva=" + ipva
-				+ ", taxasDetran=" + taxasDetran
-				+ ", seguroDPVAT=" + seguroDPVAT
-				+ ", observacoes=" + observacoes
-				+ "]";
+	/*
+	 * Relacionamento
+	 * */
+	@ManyToOne
+	@JoinColumn(name="usuario_login") 
+	public Usuario getUsuario() {
+		return usuario;
+	}
+
+	public void setUsuario(Usuario usuario) {
+		this.usuario = usuario;
 	}
 }

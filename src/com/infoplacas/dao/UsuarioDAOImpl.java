@@ -1,5 +1,7 @@
 package com.infoplacas.dao;
 
+import java.util.List;
+
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -13,23 +15,42 @@ public class UsuarioDAOImpl implements UsuarioDAO {
 	@PersistenceContext(unitName="info-placas")
 	private EntityManager em;
 	
+	/*
+	 * Cria um novo registro de Veiculo
+	 * */
 	@Override
 	public void salvar(Usuario usuario) throws Exception {
 		try {
 			em.persist(usuario);
 		}
 		catch (ConstraintViolationException exception) {
-			throw new Exception(exception.getMessage());
+			throw new Exception("Senha deve ter no minimo 8 digitos");
 		}
 	}
 
+	/*
+	 * Verifica se existe um registro de usuário com os parametros passados
+	 * */
+	@SuppressWarnings("unchecked")
 	@Override
-	public Usuario buscarUsuario(Usuario usuario) {
-		Usuario resultado = (Usuario) em.createNamedQuery("buscarUsuario")
+	public List<Usuario> buscarUsuario(Usuario usuario) {
+		List<Usuario> resultado = em.createNamedQuery("buscarUsuario")
 				.setParameter("login", usuario.getLogin())
 				.setParameter("email", usuario.getEmail())
-				.setParameter("senha", usuario.getSenha())
-				.getSingleResult();
+				.setParameter("senha", usuario.getSenha()).getResultList();
 		return resultado;
+	}
+	
+	/*
+	 * Remove usuario passado
+	 * */
+	@Override
+	public void remover(Usuario usuario) throws Exception {
+		try {
+			em.remove(usuario);
+		}
+		catch (IllegalArgumentException exception) {
+			throw new Exception("Usuário não encontrado");
+		}
 	}
 }
