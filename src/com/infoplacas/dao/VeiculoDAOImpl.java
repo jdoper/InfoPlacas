@@ -1,6 +1,5 @@
 package com.infoplacas.dao;
 
-import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.List;
 
 import javax.ejb.Stateless;
@@ -44,7 +43,7 @@ public class VeiculoDAOImpl implements VeiculoDAO {
 			em.persist(veiculo);
 		}
 		catch (PersistenceException exception) {
-			throw new Exception("Placa existente");
+			throw new Exception("A placa já foi cadastrada");
 		}
 	}
 

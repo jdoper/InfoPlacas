@@ -4,6 +4,8 @@ import java.io.Serializable;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.validation.constraints.NotNull;
@@ -24,7 +26,7 @@ public class Veiculo implements Serializable {
 	private float ipva;
 	private float taxasDetran;
 	private float seguroDPVAT;
-	// private Usuario usuario;
+	private Usuario usuario;
 	
 	public Veiculo() {
 		super();
@@ -32,7 +34,7 @@ public class Veiculo implements Serializable {
 
 	public Veiculo(String placa, String marcaModelo, String fabricacaoModelo,
 			String licenciadoAte, float multas, float ipva, float taxasDetran,
-			float seguroDPVAT) {
+			float seguroDPVAT, Usuario usuario) {
 		super();
 		this.placa = placa;
 		this.marcaModelo = marcaModelo;
@@ -42,6 +44,7 @@ public class Veiculo implements Serializable {
 		this.ipva = ipva;
 		this.taxasDetran = taxasDetran;
 		this.seguroDPVAT = seguroDPVAT;
+		this.usuario = usuario;
 	}
 
 	@Id
@@ -117,7 +120,6 @@ public class Veiculo implements Serializable {
 	/*
 	 * Relacionamento
 	 * */
-	/*
 	@ManyToOne
 	@JoinColumn(name="usuario_login") 
 	public Usuario getUsuario() {
@@ -127,5 +129,4 @@ public class Veiculo implements Serializable {
 	public void setUsuario(Usuario usuario) {
 		this.usuario = usuario;
 	}
-	*/
 }

@@ -5,6 +5,7 @@ import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.PersistenceException;
 import javax.validation.ConstraintViolationException;
 
 import com.infoplacas.model.Usuario;
@@ -21,10 +22,18 @@ public class UsuarioDAOImpl implements UsuarioDAO {
 	@Override
 	public void salvar(Usuario usuario) throws Exception {
 		try {
-			em.persist(usuario);
+			if (buscarUsuario(usuario) == null) {
+				em.persist(usuario);
+			}
+			else {
+				throw new Exception("Login existente");
+			}
 		}
 		catch (ConstraintViolationException exception) {
 			throw new Exception("Senha deve ter no minimo 8 digitos");
+		}
+		catch (PersistenceException exception) {
+			throw new Exception("Login existente");
 		}
 	}
 

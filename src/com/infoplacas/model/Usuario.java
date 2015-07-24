@@ -1,16 +1,18 @@
 package com.infoplacas.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collection;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 @NamedQueries({
-	@NamedQuery(name="listaUsuarios", query="SELECT u FROM Usuario u"),
 	@NamedQuery(name="buscarUsuario", query="SELECT u FROM Usuario u WHERE u.login = :login AND u.email = :email AND u.senha = :senha")
 })
 
@@ -20,7 +22,7 @@ public class Usuario implements Serializable {
 	private String login;
 	private String email;
 	private String senha;
-	// private Collection<Veiculo> veiculos = new ArrayList<Veiculo>();
+	private Collection<Veiculo> veiculos;
 	
 	public Usuario() {
 		super();
@@ -31,6 +33,7 @@ public class Usuario implements Serializable {
 		this.login = login;
 		this.email = email;
 		this.senha = senha;
+		this.veiculos = new ArrayList<Veiculo>();
 	}
 
 	@Id
@@ -64,7 +67,6 @@ public class Usuario implements Serializable {
 	/*
 	 * Relacionamento
 	 * */
-	/*
 	@OneToMany(mappedBy="usuario")
 	public Collection<Veiculo> getVeiculos() {
 		return veiculos;
@@ -73,5 +75,4 @@ public class Usuario implements Serializable {
 	public void setVeiculos(Collection<Veiculo> veiculos) {
 		this.veiculos = veiculos;
 	}
-	*/
 }

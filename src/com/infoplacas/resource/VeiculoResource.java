@@ -139,7 +139,7 @@ public class VeiculoResource {
 
 	// Verifica o veiculo passado como parametro
 	private String verificarVeiculo(Veiculo veiculo) {
-        Pattern pattern = Pattern.compile("[A-Z]{3,3}-[0-9]{4,4}");
+        Pattern pattern = Pattern.compile("[a-zA-Z]{3,3}-[0-9]{4,4}");
         Matcher matcher = pattern.matcher(veiculo.getPlaca());
  
         if (veiculo.getPlaca() == null || veiculo.getPlaca().equals("")) {
@@ -164,7 +164,7 @@ public class VeiculoResource {
 	
 	// Verifica a placa passada como parametro
 	private boolean verificarPlaca(String placa) {
-		Pattern pattern = Pattern.compile("[A-Z]{3,3}-\\d{4,4}");
+		Pattern pattern = Pattern.compile("[a-zA-Z]{3,3}-\\d{4,4}");
         Matcher matcher = pattern.matcher(placa);
  
         if (matcher.find()){
