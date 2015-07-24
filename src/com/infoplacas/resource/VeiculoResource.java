@@ -19,6 +19,7 @@ import com.infoplacas.dao.VeiculoDAO;
 import com.infoplacas.model.RequestResponse;
 import com.infoplacas.model.Veiculo;
 
+
 @Stateless
 @Path("/veiculo")
 public class VeiculoResource {
@@ -94,8 +95,13 @@ public class VeiculoResource {
 		// Verifica parametros passados
 		String response = verificarVeiculo(veiculo);
 		if (response == null) {
-			veiculoDAO.atualizar(veiculo);
-			return Response.status(201).entity(new RequestResponse()).build();
+			try {
+				veiculoDAO.atualizar(veiculo);
+				return Response.status(201).entity(new RequestResponse()).build();
+			}
+			catch (Exception exception) {
+				return Response.status(400).entity(new RequestResponse(exception.getMessage())).build();
+			}
 		}
 		else {
 			return Response.status(400).entity(new RequestResponse(response)).build();

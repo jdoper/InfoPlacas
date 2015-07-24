@@ -13,9 +13,9 @@ public interface VeiculoDAO {
 	
 	public Veiculo getVeiculo(String placa);
 	
-	public void salvar(Veiculo veiculo);
+	public void salvar(Veiculo veiculo) throws Exception;
 	
-	public void atualizar(Veiculo veiculo);
+	public void atualizar(Veiculo veiculo) throws Exception;
 	
 	public void remover(String placa) throws Exception;
 }

@@ -1,10 +1,12 @@
 package com.infoplacas.dao;
 
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.List;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.PersistenceException;
 import javax.persistence.Query;
 
 import com.infoplacas.model.Veiculo;
@@ -37,16 +39,27 @@ public class VeiculoDAOImpl implements VeiculoDAO {
 	 * Cria um novo registro de Veiculo
 	 * */
 	@Override
-	public void salvar(Veiculo veiculo) {
-		em.persist(veiculo);
+	public void salvar(Veiculo veiculo) throws Exception {
+		try {
+			em.persist(veiculo);
+		}
+		catch (PersistenceException exception) {
+			throw new Exception("Placa existente");
+		}
 	}
 
 	/*
 	 * Atualiza registro de Veiculo
 	 * */
 	@Override
-	public void atualizar(Veiculo veiculo) {
-		em.merge(veiculo);
+	public void atualizar(Veiculo veiculo) throws Exception {
+		Veiculo existente = em.find(Veiculo.class, veiculo.getPlaca());
+		if (existente != null) {
+			em.merge(veiculo);
+		}
+		else {
+			throw new Exception("Não exsite veiculo com a placa cadastrada");
+		}
 	}
 	
 	/*

@@ -24,7 +24,6 @@ public class Veiculo implements Serializable {
 	private float ipva;
 	private float taxasDetran;
 	private float seguroDPVAT;
-	private String observacoes;
 	// private Usuario usuario;
 	
 	public Veiculo() {
@@ -33,7 +32,7 @@ public class Veiculo implements Serializable {
 
 	public Veiculo(String placa, String marcaModelo, String fabricacaoModelo,
 			String licenciadoAte, float multas, float ipva, float taxasDetran,
-			float seguroDPVAT, String observacoes) {
+			float seguroDPVAT) {
 		super();
 		this.placa = placa;
 		this.marcaModelo = marcaModelo;
@@ -43,7 +42,6 @@ public class Veiculo implements Serializable {
 		this.ipva = ipva;
 		this.taxasDetran = taxasDetran;
 		this.seguroDPVAT = seguroDPVAT;
-		this.observacoes = observacoes;
 	}
 
 	@Id
@@ -114,14 +112,6 @@ public class Veiculo implements Serializable {
 
 	public void setSeguroDPVAT(float seguroDPVAT) {
 		this.seguroDPVAT = seguroDPVAT;
-	}
-
-	public String getObservacoes() {
-		return observacoes;
-	}
-
-	public void setObservacoes(String observacoes) {
-		this.observacoes = observacoes;
 	}
 	
 	/*
