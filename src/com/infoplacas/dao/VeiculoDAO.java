@@ -6,6 +6,7 @@ import javax.ejb.Local;
 
 import com.infoplacas.model.Veiculo;
 
+
 @Local
 public interface VeiculoDAO {
 	

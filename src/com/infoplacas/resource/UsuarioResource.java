@@ -1,6 +1,5 @@
 package com.infoplacas.resource;
 
-import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -16,6 +15,7 @@ import javax.ws.rs.core.Response;
 import com.infoplacas.dao.UsuarioDAO;
 import com.infoplacas.model.RequestResponse;
 import com.infoplacas.model.Usuario;
+
 
 @Stateless
 @Path("/usuario")
@@ -55,8 +55,9 @@ public class UsuarioResource {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response pesquisarVeiculo(Usuario usuario) {
-		List<Usuario> resultado = usuarioDAO.buscarUsuario(usuario);
-		if (resultado != null && resultado.size() > 0) {
+		// List<Usuario> resultado = usuarioDAO.buscarUsuario(usuario);
+		Usuario resultado = usuarioDAO.buscarUsuario(usuario);
+		if (resultado != null) {
 			return Response.status(200).entity(new RequestResponse()).build();
 		}
 		else {
@@ -92,7 +93,7 @@ public class UsuarioResource {
 		Pattern pattern = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
         Matcher matcher = pattern.matcher(usuario.getEmail());
  
-        if (usuario.getLogin() == null || usuario.getLogin().equals("")) {
+        if (usuario.getNome() == null || usuario.getNome().equals("")) {
         	return "Campo login vazio";
         }
         else if (usuario.getEmail() == null || usuario.getEmail().equals("")) {

@@ -4,12 +4,11 @@ import java.io.Serializable;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
+
 
 @NamedQueries({
 	@NamedQuery(name="listaVeiculos", query="SELECT v FROM Veiculo v")
@@ -26,7 +25,7 @@ public class Veiculo implements Serializable {
 	private float ipva;
 	private float taxasDetran;
 	private float seguroDPVAT;
-	private Usuario usuario;
+	private String usuario;
 	
 	public Veiculo() {
 		super();
@@ -34,7 +33,7 @@ public class Veiculo implements Serializable {
 
 	public Veiculo(String placa, String marcaModelo, String fabricacaoModelo,
 			String licenciadoAte, float multas, float ipva, float taxasDetran,
-			float seguroDPVAT, Usuario usuario) {
+			float seguroDPVAT, String usuario) {
 		super();
 		this.placa = placa;
 		this.marcaModelo = marcaModelo;
@@ -118,15 +117,13 @@ public class Veiculo implements Serializable {
 	}
 	
 	/*
-	 * Relacionamento
+	 * "Relacionamento"
 	 * */
-	@ManyToOne
-	@JoinColumn(name="usuario_login") 
-	public Usuario getUsuario() {
+	public String getUsuario() {
 		return usuario;
 	}
 
-	public void setUsuario(Usuario usuario) {
+	public void setUsuario(String usuario) {
 		this.usuario = usuario;
 	}
 }

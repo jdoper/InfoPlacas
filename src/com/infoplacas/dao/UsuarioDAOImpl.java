@@ -1,7 +1,5 @@
 package com.infoplacas.dao;
 
-import java.util.List;
-
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -9,6 +7,7 @@ import javax.persistence.PersistenceException;
 import javax.validation.ConstraintViolationException;
 
 import com.infoplacas.model.Usuario;
+
 
 @Stateless
 public class UsuarioDAOImpl implements UsuarioDAO {
@@ -40,14 +39,17 @@ public class UsuarioDAOImpl implements UsuarioDAO {
 	/*
 	 * Verifica se existe um registro de usuário com os parametros passados
 	 * */
-	@SuppressWarnings("unchecked")
 	@Override
-	public List<Usuario> buscarUsuario(Usuario usuario) {
-		List<Usuario> resultado = em.createNamedQuery("buscarUsuario")
-				.setParameter("login", usuario.getLogin())
-				.setParameter("email", usuario.getEmail())
-				.setParameter("senha", usuario.getSenha()).getResultList();
-		return resultado;
+	public Usuario buscarUsuario(Usuario usuario) {
+		Usuario resultado = em.find(Usuario.class, usuario.getEmail());
+		if (resultado != null &&
+			resultado.getEmail() == usuario.getEmail() &&
+			resultado.getNome() == usuario.getNome()) {
+			return resultado;
+		}
+		else {
+			return null;
+		}
 	}
 	
 	/*
@@ -56,7 +58,13 @@ public class UsuarioDAOImpl implements UsuarioDAO {
 	@Override
 	public void remover(Usuario usuario) throws Exception {
 		try {
-			em.remove(usuario);
+			Usuario remover = em.find(Usuario.class, usuario.getEmail());
+			if (remover != null) {
+				em.remove(remover);
+			}
+			else {
+				throw new Exception("Usuário não encontrado");
+			}
 		}
 		catch (IllegalArgumentException exception) {
 			throw new Exception("Usuário não encontrado");

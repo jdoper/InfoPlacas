@@ -10,6 +10,7 @@ import javax.persistence.Query;
 
 import com.infoplacas.model.Veiculo;
 
+
 @Stateless
 public class VeiculoDAOImpl implements VeiculoDAO {
 
@@ -40,7 +41,12 @@ public class VeiculoDAOImpl implements VeiculoDAO {
 	@Override
 	public void salvar(Veiculo veiculo) throws Exception {
 		try {
-			em.persist(veiculo);
+			if (getVeiculo(veiculo.getPlaca()) == null) {
+				em.persist(veiculo);
+			}
+			else {
+				throw new Exception("A placa já foi cadastrada");
+			}
 		}
 		catch (PersistenceException exception) {
 			throw new Exception("A placa já foi cadastrada");

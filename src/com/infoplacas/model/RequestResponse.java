@@ -1,5 +1,6 @@
 package com.infoplacas.model;
 
+
 public class RequestResponse {
 	private boolean success;
 	private String mensagem;
@@ -32,6 +33,7 @@ public class RequestResponse {
 	/*
 	 * Acessadores
 	 * */
+	
 	public boolean isSuccess() {
 		return success;
 	}

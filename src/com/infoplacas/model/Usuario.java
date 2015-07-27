@@ -1,51 +1,40 @@
 package com.infoplacas.model;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collection;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+
 @NamedQueries({
-	@NamedQuery(name="buscarUsuario", query="SELECT u FROM Usuario u WHERE u.login = :login AND u.email = :email AND u.senha = :senha")
+	@NamedQuery(name="buscarUsuario", query="SELECT u FROM Usuario u WHERE u.nome = :nome AND u.email = :email AND u.senha = :senha"),
+	@NamedQuery(name="buscarUsuarioByLogin", query="SELECT u FROM Usuario u WHERE u.email = :email"),
 })
 
 @Entity
 public class Usuario implements Serializable {
 	private static final long serialVersionUID = -380133582796170004L;
-	private String login;
 	private String email;
+	private String nome;
 	private String senha;
-	private Collection<Veiculo> veiculos;
 	
 	public Usuario() {
 		super();
 	}
 
-	public Usuario(String login, String email, String senha) {
+	public Usuario(String email, String nome, String senha) {
 		super();
-		this.login = login;
 		this.email = email;
+		this.nome = nome;
 		this.senha = senha;
-		this.veiculos = new ArrayList<Veiculo>();
 	}
 
 	@Id
-	public String getLogin() {
-		return login;
-	}
-	
-	public void setLogin(String login) {
-		this.login = login;
-	}
-
-	@NotNull(message="Email não inserido")
+	@NotNull(message="Especifique a marca/modelo do veiculo")
 	public String getEmail() {
 		return email;
 	}
@@ -54,25 +43,22 @@ public class Usuario implements Serializable {
 		this.email = email;
 	}
 
-	@NotNull(message="Senha não inserida")
+	@NotNull(message="Especifique a marca/modelo do veiculo")
+	public String getNome() {
+		return nome;
+	}
+
+	public void setNome(String nome) {
+		this.nome = nome;
+	}
+
 	@Size(min = 8)
+	@NotNull(message="Especifique a marca/modelo do veiculo")
 	public String getSenha() {
 		return senha;
 	}
 
 	public void setSenha(String senha) {
 		this.senha = senha;
-	}
-	
-	/*
-	 * Relacionamento
-	 * */
-	@OneToMany(mappedBy="usuario")
-	public Collection<Veiculo> getVeiculos() {
-		return veiculos;
-	}
-
-	public void setVeiculos(Collection<Veiculo> veiculos) {
-		this.veiculos = veiculos;
 	}
 }
