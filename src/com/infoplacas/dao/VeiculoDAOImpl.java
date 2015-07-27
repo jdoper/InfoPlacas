@@ -41,11 +41,19 @@ public class VeiculoDAOImpl implements VeiculoDAO {
 	@Override
 	public void salvar(Veiculo veiculo) throws Exception {
 		try {
-			if (getVeiculo(veiculo.getPlaca()) == null) {
-				em.persist(veiculo);
+			if (veiculo.getPlaca() != null && veiculo.getUsuario() != null) {
+				if (getVeiculo(veiculo.getPlaca()) == null) {
+					em.persist(veiculo);
+				}
+				else {
+					throw new Exception("A placa já foi cadastrada");
+				}
+			}
+			else if (veiculo.getPlaca() == null) {
+				throw new Exception("O campo placa nao foi informado");
 			}
 			else {
-				throw new Exception("A placa já foi cadastrada");
+				throw new Exception("O campo usuario nao foi informado");
 			}
 		}
 		catch (PersistenceException exception) {

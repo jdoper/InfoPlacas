@@ -11,12 +11,8 @@ import com.infoplacas.model.Veiculo;
 public interface VeiculoDAO {
 	
 	public List<Veiculo> getAllVeiculos();
-	
 	public Veiculo getVeiculo(String placa);
-	
 	public void salvar(Veiculo veiculo) throws Exception;
-	
 	public void atualizar(Veiculo veiculo) throws Exception;
-	
 	public void remover(String placa) throws Exception;
 }

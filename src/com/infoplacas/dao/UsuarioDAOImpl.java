@@ -21,7 +21,13 @@ public class UsuarioDAOImpl implements UsuarioDAO {
 	@Override
 	public void salvar(Usuario usuario) throws Exception {
 		try {
-			if (buscarUsuario(usuario) == null) {
+			if (usuario.getEmail() == null) {
+				throw new Exception("Email nao informado");
+			}
+			else if (usuario.getSenha() == null) {
+				throw new Exception("Senha nao informada");
+			}
+			else if (buscar(usuario) == null) {
 				em.persist(usuario);
 			}
 			else {
@@ -37,10 +43,24 @@ public class UsuarioDAOImpl implements UsuarioDAO {
 	}
 
 	/*
+	 * Verifica se existe um registro de usuário com o parametro passado
+	 * */
+	@Override
+	public Usuario buscar(String email) {
+		Usuario resultado = em.find(Usuario.class, email);
+		if (resultado != null) {
+			return resultado;
+		}
+		else {
+			return null;
+		}
+	}
+	
+	/*
 	 * Verifica se existe um registro de usuário com os parametros passados
 	 * */
 	@Override
-	public Usuario buscarUsuario(Usuario usuario) {
+	public Usuario buscar(Usuario usuario) {
 		Usuario resultado = em.find(Usuario.class, usuario.getEmail());
 		if (resultado != null &&
 			resultado.getEmail() == usuario.getEmail() &&
@@ -59,8 +79,13 @@ public class UsuarioDAOImpl implements UsuarioDAO {
 	public void remover(Usuario usuario) throws Exception {
 		try {
 			Usuario remover = em.find(Usuario.class, usuario.getEmail());
-			if (remover != null) {
+			if (remover != null && 
+				remover.getNome() == usuario.getNome() &&
+				remover.getSenha() == usuario.getSenha()) {
 				em.remove(remover);
+			}
+			else if (remover != null) {
+				throw new Exception("Os nome e senha não correspondem");
 			}
 			else {
 				throw new Exception("Usuário não encontrado");

@@ -9,8 +9,7 @@ import com.infoplacas.model.Usuario;
 public interface UsuarioDAO {
 	
 	public void salvar(Usuario usuario) throws Exception;
-	
-	public Usuario buscarUsuario(Usuario usuario);
-	
+	public Usuario buscar(Usuario usuario);
+	public Usuario buscar(String email);
 	public void remover(Usuario usuario) throws Exception;
 }

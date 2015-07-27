@@ -12,7 +12,7 @@ import javax.validation.constraints.Size;
 
 @NamedQueries({
 	@NamedQuery(name="buscarUsuario", query="SELECT u FROM Usuario u WHERE u.nome = :nome AND u.email = :email AND u.senha = :senha"),
-	@NamedQuery(name="buscarUsuarioByLogin", query="SELECT u FROM Usuario u WHERE u.email = :email"),
+	@NamedQuery(name="buscarUsuarioByEmail", query="SELECT u FROM Usuario u WHERE u.email = :email"),
 })
 
 @Entity
@@ -34,7 +34,7 @@ public class Usuario implements Serializable {
 	}
 
 	@Id
-	@NotNull(message="Especifique a marca/modelo do veiculo")
+	@NotNull(message="Email nao inserido")
 	public String getEmail() {
 		return email;
 	}
@@ -43,7 +43,7 @@ public class Usuario implements Serializable {
 		this.email = email;
 	}
 
-	@NotNull(message="Especifique a marca/modelo do veiculo")
+	@NotNull(message="Nome nao inserido")
 	public String getNome() {
 		return nome;
 	}
@@ -53,7 +53,7 @@ public class Usuario implements Serializable {
 	}
 
 	@Size(min = 8)
-	@NotNull(message="Especifique a marca/modelo do veiculo")
+	@NotNull(message="Senha nao inserida")
 	public String getSenha() {
 		return senha;
 	}

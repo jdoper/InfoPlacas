@@ -56,7 +56,7 @@ public class UsuarioResource {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response pesquisarVeiculo(Usuario usuario) {
 		// List<Usuario> resultado = usuarioDAO.buscarUsuario(usuario);
-		Usuario resultado = usuarioDAO.buscarUsuario(usuario);
+		Usuario resultado = usuarioDAO.buscar(usuario);
 		if (resultado != null) {
 			return Response.status(200).entity(new RequestResponse()).build();
 		}
@@ -73,7 +73,7 @@ public class UsuarioResource {
 	@Path("/excluir")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response ExcluirVeiculo(Usuario usuario) {
+	public Response excluirVeiculo(Usuario usuario) {
 		try {
 			usuarioDAO.remover(usuario);
 			return Response.status(200).entity(new RequestResponse()).build();
