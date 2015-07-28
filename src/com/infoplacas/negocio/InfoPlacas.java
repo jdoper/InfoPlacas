@@ -17,6 +17,7 @@ public interface InfoPlacas {
 	public Usuario buscarUsuario(Usuario usuario);
 	public Usuario buscarUsuario(String email);
 	public boolean excluirUsuario(Usuario usuario);
+	public List<Veiculo> listarVeiculos(Usuario usuario);
 	
 	/*
 	 * Veiculo

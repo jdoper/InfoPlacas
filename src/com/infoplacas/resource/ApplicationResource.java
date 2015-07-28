@@ -75,6 +75,15 @@ public class ApplicationResource {
 		}
 	}
 	
+	// DESC: Listar Veiculos de um Usuario
+	// URL: http://localhost:8000/InfoPlacas/api/usuario/veiculos
+	@POST
+	@Path("/usuario/veiculos")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<Veiculo> listarVeiculos(Usuario usuario) {
+		return negocio.listarVeiculos(usuario);
+	}
+	
 	
 	
 	/*
@@ -102,7 +111,7 @@ public class ApplicationResource {
 			return Response.status(200).entity(veiculo).build();
 		}
 		else {
-			return Response.status(400).entity(new RequestResponse(negocio.getMensagem())).build();
+			return Response.status(400).entity(new RequestResponse("Nenhum veiculo cadastrado com a placa passada")).build();
 		}
 	}
 	

@@ -63,8 +63,8 @@ public class UsuarioDAOImpl implements UsuarioDAO {
 	public Usuario buscar(Usuario usuario) {
 		Usuario resultado = em.find(Usuario.class, usuario.getEmail());
 		if (resultado != null &&
-			resultado.getEmail() == usuario.getEmail() &&
-			resultado.getNome() == usuario.getNome()) {
+			resultado.getNome().equals(usuario.getNome()) &&
+			resultado.getSenha().equals(usuario.getSenha())) {
 			return resultado;
 		}
 		else {
@@ -80,8 +80,8 @@ public class UsuarioDAOImpl implements UsuarioDAO {
 		try {
 			Usuario remover = em.find(Usuario.class, usuario.getEmail());
 			if (remover != null && 
-				remover.getNome() == usuario.getNome() &&
-				remover.getSenha() == usuario.getSenha()) {
+				remover.getNome().equals(usuario.getNome()) &&
+				remover.getSenha().equals(usuario.getSenha())) {
 				em.remove(remover);
 			}
 			else if (remover != null) {

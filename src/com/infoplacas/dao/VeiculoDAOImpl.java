@@ -88,4 +88,14 @@ public class VeiculoDAOImpl implements VeiculoDAO {
 			throw new Exception("Não exsite veiculo com a placa cadastrada");
 		}
 	}
+	
+	/*
+	 * Lista os Veiculos do Usuário passado
+	 * */
+	@SuppressWarnings("unchecked")
+	public List<Veiculo> getUserVeiculos(String usuario) {
+		Query consulta = em.createNamedQuery("listaVeiculosByUsuario");
+		consulta.setParameter("usuario", usuario);
+		return consulta.getResultList();
+	}
 }

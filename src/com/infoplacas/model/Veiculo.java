@@ -11,7 +11,8 @@ import javax.validation.constraints.Pattern;
 
 
 @NamedQueries({
-	@NamedQuery(name="listaVeiculos", query="SELECT v FROM Veiculo v")
+	@NamedQuery(name="listaVeiculos", query="SELECT v FROM Veiculo v"),
+	@NamedQuery(name="listaVeiculosByUsuario", query="SELECT v FROM Veiculo v WHERE v.usuario = :usuario")
 })
 
 @Entity

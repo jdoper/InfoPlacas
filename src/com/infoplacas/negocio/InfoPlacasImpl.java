@@ -47,12 +47,14 @@ public class InfoPlacasImpl implements InfoPlacas {
 	// Busca um usuario, verificando seus parametros
 	@Override
 	public Usuario buscarUsuario(Usuario usuario) {
+		mensagem = "Usuario nao encontrado";
 		return usuarioDAO.buscar(usuario);
 	}
 	
 	// Busca o registro de Usuario com ID (email) correspondente
 	@Override
 	public Usuario buscarUsuario(String email) {
+		mensagem = "Usuario nao encontrado";
 		return usuarioDAO.buscar(email);
 	}
 
@@ -69,6 +71,13 @@ public class InfoPlacasImpl implements InfoPlacas {
 		}
 	}
 	
+	// Retorna os veiculos cadastrados de um Usuario
+	@Override
+	public List<Veiculo> listarVeiculos(Usuario usuario) {
+		return veiculoDAO.getUserVeiculos(usuario.getEmail());
+	}
+	
+	
 	
 	/*
 	 * Veiculo
@@ -83,21 +92,33 @@ public class InfoPlacasImpl implements InfoPlacas {
 	// Busca veiculo pela placa
 	@Override
 	public Veiculo buscarVeiculo(String placa) {
-		return veiculoDAO.getVeiculo(placa);
+		if (verificarPlaca(placa)) {
+			mensagem = "Nao existe Veiculo com a placa passada";
+			return veiculoDAO.getVeiculo(this.placa);
+		}
+		else {
+			mensagem = "Placa com formato invalido";
+			return null;
+		}
 	}
 	
 	// Cria um novo registro de Veiculo
 	@Override
 	public boolean criarVeiculo(Veiculo veiculo) {
 		try {
-			if (buscarUsuario(veiculo.getUsuario()) != null) {
+			if (veiculo.getUsuario() != null &&
+				buscarUsuario(veiculo.getUsuario()) != null) {
 				veiculoDAO.salvar(veiculo);
 				return true;
 			}
-			
-			// Caso nao exista veiculo com o email passado
-			mensagem = "O usuario nao existe";
-			return false;
+			else if (veiculo.getUsuario() == null) {
+				mensagem = "Usuario nao informado";
+				return false;
+			}
+			else {
+				mensagem = "Nao foi possivel cadastrar o Veiculo";
+				return false;
+			}
 		}
 		catch (Exception exception) {
 			mensagem = exception.getMessage();
@@ -122,8 +143,14 @@ public class InfoPlacasImpl implements InfoPlacas {
 	@Override
 	public boolean excluirVeiculo(String placa) {
 		try {
-			veiculoDAO.remover(placa);
-			return true;
+			if (verificarPlaca(placa)) {
+				veiculoDAO.remover(this.placa);
+				return true;
+			}
+			else {
+				mensagem = "Placa com formato invalido";
+				return false;
+			}
 		}
 		catch (Exception exception) {
 			mensagem = exception.getMessage();
@@ -150,7 +177,8 @@ public class InfoPlacasImpl implements InfoPlacas {
         Matcher matcher = padrao.matcher(placa);
         
         if (matcher.find()){
-            return true;
+        	this.placa = placa;
+        	return true;
         }
         
         /*
@@ -160,6 +188,9 @@ public class InfoPlacasImpl implements InfoPlacas {
         matcher = padrao.matcher(placa);
         
         if (matcher.find()){
+        	String letras = placa.substring(0,3).trim();
+    		String numeros = placa.substring(3,7).trim();
+    		this.placa = letras + "-" + numeros;
             return true;
         }
         
@@ -170,6 +201,8 @@ public class InfoPlacasImpl implements InfoPlacas {
         matcher = padrao.matcher(placa);
         
         if (matcher.find()){
+        	String[] partes = placa.split("-");
+        	this.placa = partes[0].toUpperCase() + partes[1];
             return true;
         }
         
@@ -180,7 +213,10 @@ public class InfoPlacasImpl implements InfoPlacas {
         matcher = padrao.matcher(placa);
 		
         if (matcher.find()){
-            return true;
+        	String letras = placa.substring(0,3).trim();
+    		String numeros = placa.substring(3,7).trim();
+    		this.placa = letras.toUpperCase() + "-" + numeros;
+        	return true;
         }
         
         // Nenhum padrao valido
