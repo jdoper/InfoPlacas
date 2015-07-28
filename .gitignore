@@ -1,2 +1,4 @@
 target/classes/com/infoplacas/*
 *.class
+*/.DS_Store
+.DS_Store
