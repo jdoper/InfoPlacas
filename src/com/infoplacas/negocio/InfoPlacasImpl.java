@@ -47,8 +47,14 @@ public class InfoPlacasImpl implements InfoPlacas {
 	// Busca um usuario, verificando seus parametros
 	@Override
 	public Usuario buscarUsuario(Usuario usuario) {
-		mensagem = "Usuario nao encontrado";
-		return usuarioDAO.buscar(usuario);
+		if (usuario.getEmail() != null) {
+			mensagem = "Usuario nao encontrado";
+			return usuarioDAO.buscar(usuario);
+		}
+		else {
+			mensagem = "Login nao informado";
+			return null;
+		}
 	}
 	
 	// Busca o registro de Usuario com ID (email) correspondente

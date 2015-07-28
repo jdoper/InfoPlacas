@@ -44,16 +44,16 @@ public class ApplicationResource {
 	}
 	
 	
-	// DESC: Buscar Usuario
-	// URL: http://localhost:8080/InfoPlacas/api/usuario/buscar
+	// DESC: Login Usuario
+	// URL: http://localhost:8080/InfoPlacas/api/usuario/login
 	@POST
-	@Path("/usuario/buscar")
+	@Path("/usuario/login")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response pesquisarUsuario(Usuario usuario) {
 		Usuario resultado = negocio.buscarUsuario(usuario);
 		if (resultado != null) {
-			return Response.status(200).entity(resultado).build();
+			return Response.status(200).entity(new RequestResponse()).build();
 		}
 		else {
 			return Response.status(400).entity(new RequestResponse(negocio.getMensagem())).build();

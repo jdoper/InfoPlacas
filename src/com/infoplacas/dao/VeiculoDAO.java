@@ -4,7 +4,6 @@ import java.util.List;
 
 import javax.ejb.Local;
 
-import com.infoplacas.model.Usuario;
 import com.infoplacas.model.Veiculo;
 
 

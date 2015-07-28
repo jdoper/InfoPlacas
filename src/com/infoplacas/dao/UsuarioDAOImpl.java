@@ -63,7 +63,6 @@ public class UsuarioDAOImpl implements UsuarioDAO {
 	public Usuario buscar(Usuario usuario) {
 		Usuario resultado = em.find(Usuario.class, usuario.getEmail());
 		if (resultado != null &&
-			resultado.getNome().equals(usuario.getNome()) &&
 			resultado.getSenha().equals(usuario.getSenha())) {
 			return resultado;
 		}
