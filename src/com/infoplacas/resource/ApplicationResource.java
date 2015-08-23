@@ -18,6 +18,7 @@ import com.infoplacas.model.Usuario;
 import com.infoplacas.model.Veiculo;
 import com.infoplacas.negocio.InfoPlacas;
 
+
 @Stateless
 @Path("/api")
 public class ApplicationResource {

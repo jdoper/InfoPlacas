@@ -33,4 +33,5 @@ public interface InfoPlacas {
 	 * */
 	public String getMensagem();
 	public boolean verificarPlaca(String placa);
+	public void atualizarInformacoes();
 }

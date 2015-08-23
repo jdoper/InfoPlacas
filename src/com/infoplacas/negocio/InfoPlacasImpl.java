@@ -5,6 +5,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.ejb.EJB;
+import javax.ejb.Schedule;
 import javax.ejb.Stateless;
 
 import com.infoplacas.dao.UsuarioDAO;
@@ -227,5 +228,13 @@ public class InfoPlacasImpl implements InfoPlacas {
         
         // Nenhum padrao valido
         return false;
+	}
+
+	// Diariamente atualiza as informações dos veiculos cadastrados
+	@Schedule(second="0", minute="*/1", hour="*")
+	@Override
+	public void atualizarInformacoes() {
+		// Implementar método
+		System.out.println("Tarefa executada com sucesso!");
 	}
 }
