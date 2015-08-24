@@ -1,12 +1,25 @@
 package com.infoplacas.negocio;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLEncoder;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.ejb.EJB;
 import javax.ejb.Schedule;
 import javax.ejb.Stateless;
+
+import sun.net.www.http.HttpClient;
 
 import com.infoplacas.dao.UsuarioDAO;
 import com.infoplacas.dao.VeiculoDAO;
@@ -234,7 +247,49 @@ public class InfoPlacasImpl implements InfoPlacas {
 	@Schedule(second="0", minute="*/1", hour="*")
 	@Override
 	public void atualizarInformacoes() {
-		// Implementar método
-		System.out.println("Tarefa executada com sucesso!");
+		try {
+			// Recupera veiculos e intera sobre eles
+			List<Veiculo> veiculos = listarVeiculos();
+			for (Veiculo veiculo : veiculos) {
+				// Prepara a requisição
+				URL url = new URL("https://www.sinesp.gov.br/sinesp-cidadao/api/busca-veiculo");
+		        Map<String,Object> params = new LinkedHashMap<>();
+		        params.put("placa", veiculo.getPlaca());
+		        
+		        StringBuilder postData = new StringBuilder();
+		        for (Map.Entry<String,Object> param : params.entrySet()) {
+		            if (postData.length() != 0) postData.append('&');
+		            postData.append(URLEncoder.encode(param.getKey(), "UTF-8"));
+		            postData.append('=');
+		            postData.append(URLEncoder.encode(String.valueOf(param.getValue()), "UTF-8"));
+		        }
+		        byte[] postDataBytes = postData.toString().getBytes("UTF-8");
+
+		        // Realiza a requisição
+		        HttpURLConnection conn = (HttpURLConnection)url.openConnection();
+		        conn.setRequestMethod("POST");
+		        conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+		        conn.setRequestProperty("Content-Length", String.valueOf(postDataBytes.length));
+		        conn.setDoOutput(true);
+		        conn.getOutputStream().write(postDataBytes);
+
+		        // Atualiza as informações
+		        String resultado = "";
+		        Reader in = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"));
+		        for ( int c = in.read(); c != -1; c = in.read() ) {
+		            resultado += c;
+		        }
+		        veiculo.setLicenciadoAte(resultado);
+			}
+		}
+		catch (MalformedURLException e) {
+			System.out.println(e.getMessage());
+		} 
+		catch (UnsupportedEncodingException e) {
+			System.out.println(e.getMessage());
+		} 
+		catch (IOException e) {
+			System.out.println(e.getMessage());
+		}
 	}
 }
