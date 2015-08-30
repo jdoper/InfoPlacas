@@ -3,15 +3,10 @@ package com.infoplacas.negocio;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.Reader;
-import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.net.URLEncoder;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -19,7 +14,8 @@ import javax.ejb.EJB;
 import javax.ejb.Schedule;
 import javax.ejb.Stateless;
 
-import sun.net.www.http.HttpClient;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import com.infoplacas.dao.UsuarioDAO;
 import com.infoplacas.dao.VeiculoDAO;
@@ -39,6 +35,10 @@ public class InfoPlacasImpl implements InfoPlacas {
 	
 	@EJB
 	private VeiculoDAO veiculoDAO;
+	
+	// Variaveis para requisição
+    private static final String USER_AGENT = "Mozilla/5.0";
+    private static final String GET_URL = "http://exemplo-teste.herokuapp.com/api/v1/veiculo/";
 	
 	
 	/*
@@ -244,52 +244,63 @@ public class InfoPlacasImpl implements InfoPlacas {
 	}
 
 	// Diariamente atualiza as informações dos veiculos cadastrados
-	@Schedule(second="0", minute="*/1", hour="*")
+	@Schedule(second="*", minute="*/1", hour="*")
 	@Override
 	public void atualizarInformacoes() {
-		try {
-			// Recupera veiculos e intera sobre eles
-			List<Veiculo> veiculos = listarVeiculos();
-			for (Veiculo veiculo : veiculos) {
+		// Recupera e intera sobre os veiculos cadastrados
+		List<Veiculo> veiculos = listarVeiculos();
+		for (Veiculo veiculo : veiculos) {
+			try {
 				// Prepara a requisição
-				URL url = new URL("https://www.sinesp.gov.br/sinesp-cidadao/api/busca-veiculo");
-		        Map<String,Object> params = new LinkedHashMap<>();
-		        params.put("placa", veiculo.getPlaca());
+				URL obj = new URL(GET_URL + veiculo.getPlaca());
+		        HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+		        con.setRequestMethod("GET");
+		        con.setRequestProperty("User-Agent", USER_AGENT);
+		        int responseCode = con.getResponseCode();
+		        System.out.println("GET Response Code :: " + responseCode);
 		        
-		        StringBuilder postData = new StringBuilder();
-		        for (Map.Entry<String,Object> param : params.entrySet()) {
-		            if (postData.length() != 0) postData.append('&');
-		            postData.append(URLEncoder.encode(param.getKey(), "UTF-8"));
-		            postData.append('=');
-		            postData.append(URLEncoder.encode(String.valueOf(param.getValue()), "UTF-8"));
+		        // Verifica status da resposta
+		        if (responseCode == HttpURLConnection.HTTP_OK) { // Sucesso
+		            BufferedReader in = new BufferedReader(new InputStreamReader(
+		                    con.getInputStream()));
+		            String inputLine;
+		            StringBuffer response = new StringBuffer();
+		            
+		            // Recupera informações do response
+		            while ((inputLine = in.readLine()) != null) {
+		                response.append(inputLine);
+		            }
+		            in.close();
+		 
+		            // Formata informações recuperadas
+		            JSONObject jsonObject = new JSONObject(response.toString());
+		            System.out.println((String) jsonObject.get("placa") + " - " + (String) jsonObject.get("marcaModelo"));
+		            
+		            // Atualiza informações do veiculo
+		            veiculo.setMultas(Float.parseFloat((String) jsonObject.get("multas")));
+		            veiculo.setIpva(Float.parseFloat((String) jsonObject.get("ipva")));
+		            veiculo.setTaxasDetran(Float.parseFloat((String) jsonObject.get("taxasDetran")));
+		            veiculo.setSeguroDPVAT(Float.parseFloat((String) jsonObject.get("seguroDPVAT")));
+		            boolean resultado = editarVeiculo(veiculo);
+		            
+		            System.out.println("Resultado: " + resultado);
+		        } 
+		        else { // ERRO
+		            System.out.println("Não foi possível realizar a requisição");
 		        }
-		        byte[] postDataBytes = postData.toString().getBytes("UTF-8");
-
-		        // Realiza a requisição
-		        HttpURLConnection conn = (HttpURLConnection)url.openConnection();
-		        conn.setRequestMethod("POST");
-		        conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
-		        conn.setRequestProperty("Content-Length", String.valueOf(postDataBytes.length));
-		        conn.setDoOutput(true);
-		        conn.getOutputStream().write(postDataBytes);
-
-		        // Atualiza as informações
-		        String resultado = "";
-		        Reader in = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"));
-		        for ( int c = in.read(); c != -1; c = in.read() ) {
-		            resultado += c;
-		        }
-		        veiculo.setLicenciadoAte(resultado);
 			}
-		}
-		catch (MalformedURLException e) {
-			System.out.println(e.getMessage());
-		} 
-		catch (UnsupportedEncodingException e) {
-			System.out.println(e.getMessage());
-		} 
-		catch (IOException e) {
-			System.out.println(e.getMessage());
+			catch (MalformedURLException e) {
+				System.out.println(e.getMessage());
+			}
+			catch (JSONException e) {
+				System.out.println(e.getMessage());
+			}
+			catch (IOException e) {
+				System.out.println(e.getMessage());
+			} 
+			catch (Exception e) {
+				System.out.println(e.getMessage());
+			}
 		}
 	}
 }
